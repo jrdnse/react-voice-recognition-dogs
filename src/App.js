@@ -58,11 +58,8 @@ function App(props) {
     if (!listening && finalTranscript !== '') {
       breed = finalTranscript.toLowerCase().split(' ');
       if (subBreeds.includes(breed[1])) {
-        reqUrl = `https://dog.ceo/api/breed/${breed[1]}/${
-          breed[0]
-        }/images/random`;
+        reqUrl = `https://dog.ceo/api/breed/${breed[1]}/${breed[0]}/images/random`;
       } else {
-        breed = finalTranscript.toLowerCase();
         reqUrl = `https://dog.ceo/api/breed/${breed}/images/random`;
       }
 
