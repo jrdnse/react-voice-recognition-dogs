@@ -3,6 +3,10 @@
   background-color: red;
 }
 
-.container{
-  margin-top: 15px;
+body {
+  background: #def8f8;
+}
+
+button {
+  margin: 30px;
 }
