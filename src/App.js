@@ -13,7 +13,6 @@ const options = {
 
 function App(props) {
   const {
-    transcript,
     browserSupportsSpeechRecognition,
     startListening,
     finalTranscript,
@@ -21,20 +20,60 @@ function App(props) {
     resetTranscript
   } = props;
 
-  const [url, setUrl] = useState('');
+  const [imgSrc, setImgSrc] = useState('');
   const [breedName, setBreedName] = useState('');
 
   useEffect(() => {
+    const subBreeds = [
+      'bulldog',
+      'bullterrier',
+      'cattledog',
+      'collie',
+      'corgi',
+      'dane',
+      'deerhound',
+      'elkhound',
+      'frise',
+      'greyhound',
+      'hound',
+      'mastiff',
+      'mountain',
+      'pinscher',
+      'pointer',
+      'poodle',
+      'retriever',
+      'ridgeback',
+      'schnauzer',
+      'setter',
+      'sheepdog',
+      'spaniel',
+      'springer',
+      'terrier',
+      'wolfhound'
+    ];
+
+    let reqUrl;
+    let breed;
+
     if (!listening && finalTranscript !== '') {
-      const breed = finalTranscript.toLowerCase();
-      setBreedName(breed);
+      breed = finalTranscript.toLowerCase().split(' ');
+      if (subBreeds.includes(breed[1])) {
+        reqUrl = `https://dog.ceo/api/breed/${breed[1]}/${
+          breed[0]
+        }/images/random`;
+      } else {
+        breed = finalTranscript.toLowerCase();
+        reqUrl = `https://dog.ceo/api/breed/${breed}/images/random`;
+      }
+
+      setBreedName(finalTranscript);
 
       axios
-        .get(`https://dog.ceo/api/breed/${breed}/images/random`)
-        .then(res => setUrl(res.data.message))
+        .get(reqUrl)
+        .then(res => setImgSrc(res.data.message))
         .then(resetTranscript());
     }
-  });
+  }, [listening, finalTranscript, resetTranscript]);
 
   if (!browserSupportsSpeechRecognition) {
     alert('your browser does not support the Web Speech API');
@@ -56,7 +95,7 @@ function App(props) {
       </Row>
       <Row>
         <Col className="text-center">
-          <img alt="dog" src={url} />
+          {imgSrc ? <img alt="dog" src={imgSrc} /> : ''}
         </Col>
       </Row>
     </Container>
@@ -66,7 +105,6 @@ function App(props) {
 export default SpeechRecognition(options)(App);
 
 App.propTypes = {
-  transcript: PropTypes.string,
   finalTranscript: PropTypes.string,
   listening: PropTypes.bool,
   browserSupportsSpeechRecognition: PropTypes.bool,
