@@ -18,7 +18,8 @@ function App(props) {
     startListening,
     finalTranscript,
     listening,
-    resetTranscript
+    resetTranscript,
+    recognition
   } = props;
 
   const [imgSrc, setImgSrc] = useState('');
@@ -56,7 +57,9 @@ function App(props) {
 
     let reqUrl;
     let breed;
-
+  
+    recognition.lang = 'en-US';
+    
     if (!listening && finalTranscript !== '') {
       breed = finalTranscript.toLowerCase().split(' ');
       if (subBreeds.includes(breed[1])) {
